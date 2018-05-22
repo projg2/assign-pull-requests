@@ -85,6 +85,7 @@ def verify_emails(mails, bz):
 
 def main(ref_repo_path):
     GITHUB_DEV_MAPPING = os.environ['GITHUB_DEV_MAPPING']
+    GITHUB_PROXIED_MAINT_MAPPING = os.environ['GITHUB_PROXIED_MAINT_MAPPING']
     GITHUB_PROJ_MAPPING = os.environ['GITHUB_PROJ_MAPPING']
     GITHUB_USERNAME = os.environ['GITHUB_USERNAME']
     GITHUB_TOKEN_FILE = os.environ['GITHUB_TOKEN_FILE']
@@ -104,8 +105,10 @@ def main(ref_repo_path):
     bz = bugzilla.Bugzilla(BUGZILLA_URL,
                            api_key=bugz_apikey)
 
-    with open(GITHUB_DEV_MAPPING) as f:
+    with open(GITHUB_PROXIED_MAINT_MAPPING) as f:
         dev_mapping = json.load(f)
+    with open(GITHUB_DEV_MAPPING) as f:
+        dev_mapping.update(json.load(f))
     with open(GITHUB_PROJ_MAPPING) as f:
         proj_mapping = json.load(f)
     with open(os.path.join(ref_repo_path, 'profiles/categories')) as f:
