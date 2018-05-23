@@ -10,7 +10,10 @@ import os.path
 import re
 import socket
 import sys
-import urllib
+try:
+    import urllib.request as urllib
+except ImportError:
+    import urllib
 try:
     import xmlrpc.client as xmlrpcclient
 except ImportError:
