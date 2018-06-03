@@ -339,6 +339,8 @@ def assign_one(pr_getter, issue, dev_mapping, proj_mapping, categories,
         issue.add_to_labels('no bug found')
     if invalid_email:
         issue.add_to_labels('invalid email')
+    if '[noci]' in issue.title.lower():
+        issue.add_to_labels('noci')
     print('PR#%d: assigned' % pr.number)
 
 
