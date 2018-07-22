@@ -301,8 +301,11 @@ def assign_one(pr_getter, issue, dev_mapping, proj_mapping, categories,
     if bugs:
         body += '\n\nBugs linked: %s' % ', '.join([
                 '[%d](%s/%d)' % (x, BUGZILLA_URL, x) for x in bugs])
-        updq = bz.build_update(see_also_add=[pr.html_url])
-        bz.update_bugs(list(bugs), updq)
+        if len(bugs) > 5:
+            body += '\nCross-linking bugs disabled due to large number of bugs linked.'
+        else:
+            updq = bz.build_update(see_also_add=[pr.html_url])
+            bz.update_bugs(list(bugs), updq)
     else:
         body += '\n\nNo bugs to link found. If your pull request references any of the Gentoo bug reports, please add appropriate [GLEP 66](https://www.gentoo.org/glep/glep-0066.html#commit-messages) tags to the commit message and ping us to reset the assignment.'
 
