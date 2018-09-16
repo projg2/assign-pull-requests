@@ -280,15 +280,6 @@ Please note that on 2018-09-15 Trustees have approved [new Gentoo copyright poli
         finally:
             f.close()
 
-    # now verify maintainers for invalid addresses
-    if totally_all_maints:
-        invalid_mails = sorted(verify_emails(totally_all_maints, bz))
-        if invalid_mails:
-            invalid_email = True
-            body += '\n\n**WARNING**: The following maintainers do not match any Bugzilla accounts:'
-            for m in invalid_mails:
-                body += '\n- %s' % m
-
     # scan for bugs now
     bugs = set()
     for c in pr.get_commits():
@@ -317,6 +308,15 @@ Please note that on 2018-09-15 Trustees have approved [new Gentoo copyright poli
         body += '\n\n**If you do not receive any reply to this pull request, please open or link a bug to attract the attention of maintainers.**'
 
     body += '\n\nIn order to force reassignment and/or bug reference scan, please append `[please reassign]` to the pull request title.'
+
+    # now verify maintainers for invalid addresses
+    if totally_all_maints:
+        invalid_mails = sorted(verify_emails(totally_all_maints, bz))
+        if invalid_mails:
+            invalid_email = True
+            body += '\n\n## Missing Bugzilla accounts\n**WARNING**: The following maintainers do not match any Bugzilla accounts:'
+            for m in invalid_mails:
+                body += '\n- %s' % m
 
     issue.create_comment(body)
 
