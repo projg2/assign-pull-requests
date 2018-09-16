@@ -180,7 +180,7 @@ def assign_one(pr_getter, issue, dev_mapping, proj_mapping, categories,
         else:
             areas.add('other files')
 
-    body = '''Pull Request assignment
+    body = '''## Pull Request assignment
 
 *Areas affected*: %s
 *Packages affected*: %s%s
