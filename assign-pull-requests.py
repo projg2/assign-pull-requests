@@ -293,8 +293,9 @@ Please note that on 2018-09-15 Trustees have approved [new Gentoo copyright poli
                 if m is not None:
                     bugs.add(int(m.group(1)))
 
+    body += '\n\n## Linked bugs'
     if bugs:
-        body += '\n\nBugs linked: %s' % ', '.join([
+        body += '\nBugs linked: %s' % ', '.join([
                 '[%d](%s/%d)' % (x, BUGZILLA_URL, x) for x in bugs])
         if len(bugs) > 5:
             body += '\nCross-linking bugs disabled due to large number of bugs linked.'
@@ -307,7 +308,7 @@ Please note that on 2018-09-15 Trustees have approved [new Gentoo copyright poli
     if not_self_maintained and not bugs:
         body += '\n\n**If you do not receive any reply to this pull request, please open or link a bug to attract the attention of maintainers.**'
 
-    body += '\n\nIn order to force reassignment and/or bug reference scan, please append `[please reassign]` to the pull request title.'
+    body += '\n\n---\nIn order to force reassignment and/or bug reference scan, please append `[please reassign]` to the pull request title.'
 
     # now verify maintainers for invalid addresses
     if totally_all_maints:
