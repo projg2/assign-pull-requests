@@ -303,12 +303,10 @@ Please note that on 2018-09-15 Trustees have approved [new Gentoo copyright poli
             updq = bz.build_update(see_also_add=[pr.html_url])
             bz.update_bugs(list(bugs), updq)
     else:
-        body += '\n\nNo bugs to link found. If your pull request references any of the Gentoo bug reports, please add appropriate [GLEP 66](https://www.gentoo.org/glep/glep-0066.html#commit-messages) tags to the commit message and ping us to reset the assignment.'
+        body += '\n\nNo bugs to link found. If your pull request references any of the Gentoo bug reports, please add appropriate [GLEP 66](https://www.gentoo.org/glep/glep-0066.html#commit-messages) tags to the commit message and request reassignment.'
 
     if not_self_maintained and not bugs:
         body += '\n\n**If you do not receive any reply to this pull request, please open or link a bug to attract the attention of maintainers.**'
-
-    body += '\n\n---\nIn order to force reassignment and/or bug reference scan, please append `[please reassign]` to the pull request title.'
 
     # now verify maintainers for invalid addresses
     if totally_all_maints:
@@ -318,6 +316,9 @@ Please note that on 2018-09-15 Trustees have approved [new Gentoo copyright poli
             body += '\n\n## Missing Bugzilla accounts\n**WARNING**: The following maintainers do not match any Bugzilla accounts:'
             for m in invalid_mails:
                 body += '\n- %s' % m
+            body += '\n\nPlease either fix the e-mail addresses in metadata.xml or create a Bugzilla account, and request reassignment afterwards.'
+
+    body += '\n\n---\nIn order to force reassignment and/or bug reference scan, please append `[please reassign]` to the pull request title.'
 
     issue.create_comment(body)
 
