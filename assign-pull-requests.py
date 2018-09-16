@@ -313,7 +313,7 @@ Please note that on 2018-09-15 Trustees have approved [new Gentoo copyright poli
         invalid_mails = sorted(verify_emails(totally_all_maints, bz))
         if invalid_mails:
             invalid_email = True
-            body += '\n\n## Missing Bugzilla accounts\n**WARNING**: The following maintainers do not match any Bugzilla accounts:'
+            body += '\n\n## Missing Bugzilla accounts\n\n**WARNING**: The following maintainers do not match any Bugzilla accounts:'
             for m in invalid_mails:
                 body += '\n- %s' % m
             body += '\n\nPlease either fix the e-mail addresses in metadata.xml or create a Bugzilla account, and request reassignment afterwards.'
@@ -323,7 +323,7 @@ Please note that on 2018-09-15 Trustees have approved [new Gentoo copyright poli
         not any(x.startswith('Signed-off-by:') for x in c.commit.message.splitlines())
         for c in pr.get_commits())
     if missing_signoff:
-        body += '\n\n## Missing GCO sign-off\nPlease read the terms of [Gentoo Certificate of Origin](https://www.gentoo.org/glep/glep-0076.html#certificate-of-origin) and acknowledge them by adding a sign-off to *all* your commits.'
+        body += '\n\n## Missing GCO sign-off\n\nPlease read the terms of [Gentoo Certificate of Origin](https://www.gentoo.org/glep/glep-0076.html#certificate-of-origin) and acknowledge them by adding a sign-off to *all* your commits.'
 
     body += '\n\n---\nIn order to force reassignment and/or bug reference scan, please append `[please reassign]` to the pull request title.\n\n*Docs*: [Code of Conduct](https://wiki.gentoo.org/wiki/Project:Council/Code_of_conduct) ● [Copyright policy](https://www.gentoo.org/glep/glep-0076.html) ([expl.](https://dev.gentoo.org/~mgorny/articles/new-gentoo-copyright-policy-explained.html)) ● [Devmanual](https://devmanual.gentoo.org/) ● [GitHub PRs](https://wiki.gentoo.org/wiki/Project:GitHub/Pull_requests) ● [Proxy-maint guide](https://wiki.gentoo.org/wiki/Project:Proxy_Maintainers/User_Guide)'
 
