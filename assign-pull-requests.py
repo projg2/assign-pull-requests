@@ -186,9 +186,11 @@ Please note that on 2018-09-15 Trustees have approved [new Gentoo copyright poli
 
 ## Pull Request assignment
 
+*Submitter*: %s
 *Areas affected*: %s
 *Packages affected*: %s%s
-''' % (', '.join(sorted(areas)) or '(none, wtf?!)',
+''' % ('@' + pr.user.login,
+        ', '.join(sorted(areas)) or '(none, wtf?!)',
         ', '.join(sorted(packages)[0:5]) or '(none)',
         '...' if len(packages) > 5 else '')
 
