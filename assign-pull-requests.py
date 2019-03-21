@@ -128,6 +128,9 @@ def main(ref_repo_path):
 
 def assign_one(pr_getter, issue, dev_mapping, proj_mapping, categories,
         GITHUB_USERNAME, ref_repo_path, bz, BUGZILLA_URL):
+    assignee_limit = 5
+    bug_limit = 5
+
     # check if we are to reassign
     if '[please reassign]' in issue.title.lower():
         print('PR#%d: [please reassign] found' % issue.number)
@@ -142,6 +145,9 @@ def assign_one(pr_getter, issue, dev_mapping, proj_mapping, categories,
             if l.name in ('assigned', 'need assignment', 'do not merge'):
                 print('PR#%d: %s label found' % (issue.number, l.name))
                 return
+            if l.name == 'no assignee limit':
+                assignee_limit = 9999
+                bug_limit = 9999
 
     pr = pr_getter()
 
@@ -242,14 +248,14 @@ Please note that on 2018-09-15 Trustees have approved [new Gentoo copyright poli
                     if '@' + pr.user.login not in all_ms:
                         not_self_maintained = True
                     unique_maints.add(tuple(sorted(all_ms)))
-                    if len(unique_maints) > 5:
+                    if len(unique_maints) > assignee_limit:
                         break
                 else:
                     # maintainer-needed!
                     pkg_maints[p] = ['@gentoo/proxy-maint (maintainer needed)']
                     maint_needed = True
 
-        if len(unique_maints) > 5:
+        if len(unique_maints) > assignee_limit:
             cant_assign = True
             body += '\n@gentoo/github: Too many disjoint maintainers, disabling auto-assignment.'
         else:
@@ -261,7 +267,7 @@ Please note that on 2018-09-15 Trustees have approved [new Gentoo copyright poli
         cant_assign = True
         body += '\n@gentoo/github'
 
-    if len(unique_maints) > 5:
+    if len(unique_maints) > assignee_limit:
         totally_all_maints = set()
 
     # if any metadata.xml files were changed, we want to check the new
@@ -299,7 +305,7 @@ Please note that on 2018-09-15 Trustees have approved [new Gentoo copyright poli
     if bugs:
         body += '\nBugs linked: %s' % ', '.join([
                 '[%d](%s/%d)' % (x, BUGZILLA_URL, x) for x in bugs])
-        if len(bugs) > 5:
+        if len(bugs) > bug_limit:
             body += '\nCross-linking bugs disabled due to large number of bugs linked.'
         else:
             updq = bz.build_update(
