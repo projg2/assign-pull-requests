@@ -145,9 +145,11 @@ def assign_one(pr_getter, issue, dev_mapping, proj_mapping, categories,
             if l.name in ('assigned', 'need assignment', 'do not merge'):
                 print('PR#%d: %s label found' % (issue.number, l.name))
                 return
-            if l.name == 'no assignee limit':
-                assignee_limit = 9999
-                bug_limit = 9999
+
+    for l in issue.labels:
+        if l.name == 'no assignee limit':
+            assignee_limit = 9999
+            bug_limit = 9999
 
     pr = pr_getter()
 
