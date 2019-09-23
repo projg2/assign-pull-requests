@@ -188,11 +188,7 @@ def assign_one(pr_getter, issue, dev_mapping, proj_mapping, categories,
         else:
             areas.add('other files')
 
-    body = '''## Copyright policy change
-
-Please note that on 2018-09-15 Trustees have approved [new Gentoo copyright policy](https://www.gentoo.org/glep/glep-0076.html). All contributions made to Gentoo need to follow this policy. If you include the *Signed-off-by* line in your commit message, you indicate that you have read the policy and **agree to its terms**. For more detailed explanation, please see the [new Gentoo copyright policy explained](https://dev.gentoo.org/~mgorny/articles/new-gentoo-copyright-policy-explained.html) article.
-
-## Pull Request assignment
+    body = '''## Pull Request assignment
 
 *Submitter*: %s
 *Areas affected*: %s
