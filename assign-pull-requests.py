@@ -198,7 +198,9 @@ def assign_one(pr_getter, issue, dev_mapping, proj_mapping, categories,
         ', '.join(sorted(packages)[0:5]) or '(none)',
         '...' if len(packages) > 5 else '')
 
+    # at least one ...
     new_package = False
+    existing_package = False
     maint_needed = False
     cant_assign = False
     not_self_maintained = False
@@ -220,6 +222,8 @@ def assign_one(pr_getter, issue, dev_mapping, proj_mapping, categories,
                 pkg_maints[p] = ['@gentoo/proxy-maint (new package)']
                 new_package = True
             else:
+                # metadata.xml found, this PR touches existing packages
+                existing_package = True
                 all_ms = []
                 for m in metadata_xml.getroot():
                     if m.tag != 'maintainer':
@@ -313,8 +317,11 @@ def assign_one(pr_getter, issue, dev_mapping, proj_mapping, categories,
     else:
         body += '\n\nNo bugs to link found. If your pull request references any of the Gentoo bug reports, please add appropriate [GLEP 66](https://www.gentoo.org/glep/glep-0066.html#commit-messages) tags to the commit message and request reassignment.'
 
-    if not_self_maintained and not bugs:
+    if existing_package and not_self_maintained and not bugs:
         body += '\n\n**If you do not receive any reply to this pull request, please open or link a bug to attract the attention of maintainers.**'
+
+    if not existing_package:
+        body += '\n\n## New packages\nThis Pull Request appears to be introducing new packages only. Due to limited manpower, adding new packages is considered low priority. This does not mean that your Pull Request will not receive any attention, however, it might take quite some time for it to be reviewed. In the meantime, your new ebuild might find a home in the [GURU project repository](https://wiki.gentoo.org/wiki/Project:GURU): the ebuild repository maintained collaboratively by Gentoo users. GURU offers your ebuild a place to be reviewed and improved by other Gentoo users, while making it easy for Gentoo users to install it and enjoy the software it adds.'
 
     # now verify maintainers for invalid addresses
     if totally_all_maints:
