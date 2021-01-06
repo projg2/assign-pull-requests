@@ -314,6 +314,11 @@ def assign_one(pr_getter, issue, dev_mapping, proj_mapping, categories,
                     keywords_add=['PullRequest'],
                     see_also_add=[pr.html_url])
             bz.update_bugs(list(bugs), updq)
+
+        # be careful to match security@, security-audit@, and security-kernel@
+        security = any(bug.assigned_to_details['id'] in [2546, 23358, 25934]
+                       for bug in bz.getbugs(list(bugs),
+                                             include_fields=['assigned_to']))
     else:
         body += '\n\nNo bugs to link found. If your pull request references any of the Gentoo bug reports, please add appropriate [GLEP 66](https://www.gentoo.org/glep/glep-0066.html#commit-messages) tags to the commit message and request reassignment.'
 
@@ -366,6 +371,8 @@ def assign_one(pr_getter, issue, dev_mapping, proj_mapping, categories,
         issue.add_to_labels('assigned')
     if bugs:
         issue.add_to_labels('bug linked')
+        if security:
+            issue.add_to_labels('security')
     elif not_self_maintained:
         issue.add_to_labels('no bug found')
     if invalid_email:
