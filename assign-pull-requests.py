@@ -316,7 +316,7 @@ def assign_one(pr_getter, issue, dev_mapping, proj_mapping, categories,
             bz.update_bugs(list(bugs), updq)
 
         # match security@, security-audit@, and security-kernel@
-        security = any(bug.assigned_to_details['id'] in [2546, 23358, 25934]
+        security = any(bug.assigned_to_detail['id'] in [2546, 23358, 25934]
                        for bug in bz.getbugs(list(bugs),
                                              include_fields=['assigned_to']))
     else:
