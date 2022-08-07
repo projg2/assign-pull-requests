@@ -320,6 +320,7 @@ def assign_one(pr_getter, issue, dev_mapping, proj_mapping, categories,
                 if e.faultCode != 101:
                     raise
                 invalid_bug_linked = True
+                body += '\n\n**One of the linked bugs does not exist!**'
 
         # match security@, security-audit@, and security-kernel@
         security = any(bug.assigned_to_detail['id'] in [2546, 23358, 25934]
