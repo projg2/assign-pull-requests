@@ -205,6 +205,7 @@ def assign_one(pr_getter, issue, dev_mapping, proj_mapping, categories,
     cant_assign = False
     not_self_maintained = False
     invalid_email = False
+    invalid_bug_linked = False
     unique_maints = set()
     totally_all_maints = set()
 
@@ -313,7 +314,12 @@ def assign_one(pr_getter, issue, dev_mapping, proj_mapping, categories,
             updq = bz.build_update(
                     keywords_add=['PullRequest'],
                     see_also_add=[pr.html_url])
-            bz.update_bugs(list(bugs), updq)
+            try:
+                bz.update_bugs(list(bugs), updq)
+            except xmlrpcclient.Fault as e:
+                if e.faultCode != 101:
+                    raise
+                invalid_bug_linked = True
 
         # match security@, security-audit@, and security-kernel@
         security = any(bug.assigned_to_detail['id'] in [2546, 23358, 25934]
@@ -353,7 +359,8 @@ def assign_one(pr_getter, issue, dev_mapping, proj_mapping, categories,
     for l in issue.labels:
         if l.name in ('assigned', 'need assignment', 'self-maintained',
                       'maintainer-needed', 'new package', 'no signoff',
-                      'bug linked', 'no bug found', 'invalid email'):
+                      'bug linked', 'no bug found', 'invalid email',
+                      'invalid bug linked'):
             issue.remove_from_labels(l.name)
 
     if maint_needed:
@@ -375,6 +382,8 @@ def assign_one(pr_getter, issue, dev_mapping, proj_mapping, categories,
             issue.add_to_labels('security')
     elif not_self_maintained:
         issue.add_to_labels('no bug found')
+    if invalid_bug_linked:
+        issue.add_to_labels('invalid bug linked')
     if invalid_email:
         issue.add_to_labels('invalid email')
     if missing_signoff:
